@@ -7,7 +7,6 @@ services:
     container_name: nginx
     ports: 
       - 8080:80
-    entrypoint: dockerize -wait http://app:3000  -timeout 20s /docker-entrypoint.sh nginx -g "daemon off";
     networks:
       - nginx-network
     depends_on: 
@@ -17,7 +16,7 @@ services:
     build: 
       context: node
     container_name: app
-    entrypoint: dockerize -wait tcp://db:3306 -timeout 10s docker-entrypoint.sh node index.js
+    entrypoint: dockerize -wait tcp://db:3306 -timeout 20s docker-entrypoint.sh node index.js
     tty: true
     environment: 
       - DB_USERNAME=fullcycle
@@ -28,8 +27,8 @@ services:
     networks: 
       - node-network
       - nginx-network 
-    volumes:
-      - ./node:/usr/src/app
+    volumes: 
+      - /usr/src/app/node_modules
     depends_on: 
       - db
 
